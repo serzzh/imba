@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 if __name__ == '__main__':
-    path = "data"
+    path = "../input"
 
     order_prior = pd.read_csv(os.path.join(path, "order_products__prior.csv"), dtype={'order_id': np.uint32,
                                                                                       'product_id': np.uint16,
@@ -30,4 +30,4 @@ if __name__ == '__main__':
     print('save')
     print(labels.shape)
     print(labels.columns)
-    labels.to_pickle('data/previous_products.pkl')
+    labels.to_pickle('../input/previous_products.pkl')

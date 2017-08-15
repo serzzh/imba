@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import numpy as np
 import os
-import arboretum
+#import arboretum
 import lightgbm as lgb
 import json
 import sklearn.metrics
@@ -14,7 +14,7 @@ from scipy.sparse import dok_matrix, coo_matrix
 from sklearn.utils.multiclass import  type_of_target
 
 if __name__ == '__main__':
-    path = "data"
+    path = "../input"
 
     aisles = pd.read_csv(os.path.join(path, "aisles.csv"), dtype={'aisle_id': np.uint8, 'aisle': 'category'})
     departments = pd.read_csv(os.path.join(path, "departments.csv"),
@@ -36,7 +36,7 @@ if __name__ == '__main__':
                                                                   'order_hour_of_day': np.uint8
                                                                   })
 
-    product_embeddings = pd.read_pickle('data/product_embeddings.pkl')
+    product_embeddings = pd.read_pickle('../input/product_embeddings.pkl')
     embedings = list(range(32))
     product_embeddings = product_embeddings[embedings + ['product_id']]
 
@@ -89,6 +89,7 @@ if __name__ == '__main__':
     prob.reordered = (prob.reordered > 0).astype(np.float32)
     prob.total = (prob.total > 0).astype(np.float32)
     prob['reorder_prob'] = prob.reordered / prob.total
+    prob = prob.reset_index()
     prob = prob.groupby('product_id').agg({'reorder_prob': 'mean'}).rename(columns={'mean': 'reorder_prob'})\
         .reset_index()
 
@@ -193,8 +194,8 @@ if __name__ == '__main__':
 
     ############################
 
-    user_dep_stat = pd.read_pickle('data/user_department_products.pkl')
-    user_aisle_stat = pd.read_pickle('data/user_aisle_products.pkl')
+    user_dep_stat = pd.read_pickle('../input/user_department_products.pkl')
+    user_aisle_stat = pd.read_pickle('../input/user_aisle_products.pkl')
 
     order_train = pd.merge(order_train, products, on='product_id')
     order_train = pd.merge(order_train, orders, on='order_id')
@@ -294,8 +295,9 @@ if __name__ == '__main__':
         'num_leaves': 256,
         'min_sum_hessian_in_leaf':20,
         'max_depth': -12,
-        'learning_rate': 0.05,
+        'learning_rate': 0.025,
         'feature_fraction': 0.6,
+	'device': 'gpu',
         # 'bagging_fraction': 0.9,
         # 'bagging_freq': 3,
         'verbose': 1

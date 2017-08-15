@@ -11,7 +11,7 @@ from sklearn.utils.multiclass import  type_of_target
 
 
 if __name__ == '__main__':
-    path = "data"
+    path = "../input"
 
     aisles = pd.read_csv(os.path.join(path, "aisles.csv"), dtype={'aisle_id': np.uint8, 'aisle': 'category'})
     departments = pd.read_csv(os.path.join(path, "departments.csv"),
@@ -52,7 +52,7 @@ if __name__ == '__main__':
                                   'reordered': 'dep_reordered'}, inplace=True)
     user_dep_stat.reset_index(inplace=True)
     print(user_dep_stat.columns)
-    user_dep_stat.to_pickle('data/user_department_products.pkl')
+    user_dep_stat.to_pickle('../input/user_department_products.pkl')
 
     user_aisle_stat = orders_products_products.groupby(['user_id', 'aisle_id']).agg(
         {'product_id': lambda x: x.nunique(),
@@ -62,4 +62,4 @@ if __name__ == '__main__':
     user_aisle_stat.rename(columns={'product_id': 'aisle_products',
                                     'reordered': 'aisle_reordered'}, inplace=True)
     user_aisle_stat.reset_index(inplace=True)
-    user_aisle_stat.to_pickle('data/user_aisle_products.pkl')
+    user_aisle_stat.to_pickle('../input/user_aisle_products.pkl')

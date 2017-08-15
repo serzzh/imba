@@ -5,8 +5,8 @@ from sklearn.model_selection import train_test_split
 
 if __name__ == '__main__':
     np.random.seed(2017)
-    products = pd.read_csv('data/products.csv')
-    df = pd.read_pickle('data/prod2vec.pkl').products
+    products = pd.read_csv('../input/products.csv')
+    df = pd.read_pickle('../input/prod2vec.pkl').products
     print('initial size', len(df))
 
     df_train, df_cv = train_test_split(df, test_size=0.1, random_state=2017)

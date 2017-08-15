@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 if __name__ == '__main__':
-    path = "data"
+    path = "../input"
     folds = 1
 
     aisles = pd.read_csv(os.path.join(path, "aisles.csv"), dtype={'aisle_id': np.uint8, 'aisle':'category'})
@@ -29,7 +29,7 @@ if __name__ == '__main__':
                                                                       'aisle_id': np.uint8,
                                                                       'department_id': np.uint8})
 
-    labels = pd.read_pickle('data/previous_products.pkl')
+    labels = pd.read_pickle('../input/previous_products.pkl')
     orders = orders.loc[(orders.eval_set == 'train') | (orders.eval_set == 'test'), :]
     labels = pd.merge(labels, orders[['order_id', 'user_id', 'eval_set']], on='user_id').drop(['user_id'], axis=1)
 
@@ -52,4 +52,4 @@ if __name__ == '__main__':
         print(current.columns)
         print(current.shape)
 
-        current.to_pickle('data/chunk_{}.pkl'.format(fold))
+        current.to_pickle('../input/chunk_{}.pkl'.format(fold))

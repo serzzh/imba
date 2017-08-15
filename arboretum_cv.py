@@ -14,7 +14,7 @@ from sklearn.utils.multiclass import  type_of_target
 
 
 if __name__ == '__main__':
-    path = "data"
+    path = "../input"
 
     aisles = pd.read_csv(os.path.join(path, "aisles.csv"), dtype={'aisle_id': np.uint8, 'aisle': 'category'})
     departments = pd.read_csv(os.path.join(path, "departments.csv"),
@@ -36,7 +36,7 @@ if __name__ == '__main__':
                                                                   'order_hour_of_day': np.uint8
                                                                   })
 
-    product_embeddings = pd.read_pickle('data/product_embeddings.pkl')
+    product_embeddings = pd.read_pickle('../input/product_embeddings.pkl')
     embedings = list(range(32))
     product_embeddings = product_embeddings[embedings + ['product_id']]
 

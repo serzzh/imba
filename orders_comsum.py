@@ -11,7 +11,7 @@ from sklearn.utils.multiclass import  type_of_target
 
 
 if __name__ == '__main__':
-    path = "data"
+    path = "../input"
 
     aisles = pd.read_csv(os.path.join(path, "aisles.csv"), dtype={'aisle_id': np.uint8, 'aisle': 'category'})
     departments = pd.read_csv(os.path.join(path, "departments.csv"),
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             ['days_since_prior_order'].sum().groupby(level=[0]).cumsum().reset_index().rename(columns={'days_since_prior_order':'days_since_prior_order_comsum'})
 
     # order_comsum['days_since_prior_order_comsum'].fillna(0, inplace=True)
-    order_comsum.to_pickle('data/orders_comsum.pkl')
+    order_comsum.to_pickle('../input/orders_comsum.pkl')
 
     order_comsum = pd.merge(order_comsum, orders, on=['user_id', 'order_number'])[['user_id', 'order_number', 'days_since_prior_order_comsum', 'order_id']]
 
@@ -61,14 +61,14 @@ if __name__ == '__main__':
     temp = order_product.groupby(['user_id', 'product_id', 'order_number'])['days_since_prior_order_comsum'].sum().groupby(level=[0, 1]).apply(lambda x: np.diff(np.nan_to_num(x)))
     temp = temp.to_frame('periods').reset_index()
 
-    temp.to_pickle('data/product_period.pkl')
+    temp.to_pickle('../input/product_period.pkl')
 
     aggregated = temp.copy()
     aggregated['last'] = aggregated.periods.apply(lambda x: x[-1])
-    aggregated['prev1'] = aggregated.periods.apply(lambda x: x[-2] if len(x) > 1 else np.nan)
-    aggregated['prev2'] = aggregated.periods.apply(lambda x: x[-3] if len(x) > 2 else np.nan)
+    aggregated['prev1'] = aggregated.periods.apply(lambda x: x[-2] if len(x) > 1 else 0)
+    aggregated['prev2'] = aggregated.periods.apply(lambda x: x[-3] if len(x) > 2 else 0)
     aggregated['median'] = aggregated.periods.apply(lambda x: np.median(x[:-1]))
     aggregated['mean'] = aggregated.periods.apply(lambda x: np.mean(x[:-1]))
     aggregated.drop('periods', axis=1, inplace=True)
 
-    aggregated.to_pickle('data/product_periods_stat.pkl')
+    aggregated.to_pickle('../input/product_periods_stat.pkl')

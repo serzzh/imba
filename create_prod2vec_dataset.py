@@ -12,7 +12,7 @@ def create_list(df):
 
 
 if __name__ == '__main__':
-    path = 'data'
+    path = '../input'
     order_prior = pd.read_csv(os.path.join(path, "order_products__prior.csv"), dtype={'order_id': np.uint32,
                                                                                       'product_id': np.uint16,
                                                                                       'add_to_cart_order': np.uint8})
